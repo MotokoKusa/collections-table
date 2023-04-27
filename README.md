@@ -1,4 +1,4 @@
-# 12123
+# collections-table
 
 ## Project setup
 ```
