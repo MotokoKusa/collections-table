@@ -109,21 +109,9 @@ export default {
 
   setup() {
     const collections = reactive({
-      tasks: [
-        { id: "9e74", value: "Задача 1" },
-        { id: "e745", value: "Задача 2" },
-        { id: "7453", value: "Задача 3" },
-      ],
-      dates: [
-        { id: "4530", value: "2023-04-27" },
-        { id: "530b", value: "2023-04-28" },
-        { id: "30bc", value: "2023-04-29" },
-      ],
-      statuses: [
-        { id: "0bc8", value: "Статус 1" },
-        { id: "bc81", value: "Статус 2" },
-        { id: "c81b", value: "Статус 3" },
-      ],
+      tasks: [],
+      dates: [],
+      statuses: [],
       events: [],
     });
 
