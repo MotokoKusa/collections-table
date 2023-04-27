@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="form">
-      <div class="form__item" v-for="(elem, idx) in formInputs" :key="idx">
-        <p>{{ DEFAULT_MESSAGES[elem] }}</p>
+      <div class="form__item" v-for="(input, idx) in formInputs" :key="idx">
+        <p>{{ INPUT_MESSAGES[input] }}</p>
         <div class="form__input">
           <input
-            :type="elem !== 'dates' ? 'text' : 'date'"
-            :name="elem"
-            :placeholder="DEFAULT_MESSAGES[elem]"
-            v-model.trim="form[elem]"
+            :type="input !== 'dates' ? 'text' : 'date'"
+            :name="input"
+            :placeholder="INPUT_MESSAGES[input]"
+            v-model.trim="form[input]"
           />
           <button
-            @click.prevent="addCollection(elem)"
-            :name="elem"
-            :disabled="!form[elem]"
+            @click="addCollection(input)"
+            :name="input"
+            :disabled="!form[input]"
           >
             Добавить
           </button>
@@ -21,44 +21,42 @@
       </div>
     </div>
     <div class="collections">
-      <div
-        class="collections__wrap"
-        v-for="(collection, key) in collections"
-        :key="key"
-      >
-        <p v-if="collection.length">{{ DEFAULT_MESSAGES[key] }}</p>
-        <div
-          class="collections__item"
-          v-for="item in collection"
-          :key="item.id"
-        >
-          <template v-if="key === 'events'">
-            <div class="collections__item__text">
-              <b>uid:</b> {{ item.id }} <b>название:</b>
-              {{ getValueById("dates", item.dateId).value }}
-              {{ getValueById("tasks", item.taskId).value }}
-              {{ getValueById("statuses", item.statusId).value }}
-            </div>
-            <button
-              @click.prevent="deleteCollection(key, item.id)"
-              class="collections__item__button"
-            >
-              Удалить
-            </button>
-          </template>
-          <template v-else>
-            <div class="collections__item__text">
-              <b>uid:</b> {{ item.id }} <b>название:</b> {{ item.value }}
-            </div>
-            <button
-              @click.prevent="deleteCollection(key, item.id)"
-              class="collections__item__button"
-            >
-              Удалить
-            </button>
-          </template>
+      <template v-for="(collection, key) in collections">
+        <div :key="key" v-if="collection.length" class="collections__wrap">
+          <p>{{ INPUT_MESSAGES[key] }}</p>
+          <div
+            class="collections__item"
+            v-for="item in collection"
+            :key="item.id"
+          >
+            <template v-if="key === 'events'">
+              <div class="collections__item__text">
+                <b>uid:</b> {{ item.id }} <b>название:</b>
+                {{ getValueById("dates", item.dateId).value }}
+                {{ getValueById("tasks", item.taskId).value }}
+                {{ getValueById("statuses", item.statusId).value }}
+              </div>
+              <button
+                @click="deleteCollection(key, item.id)"
+                class="collections__item__button"
+              >
+                Удалить
+              </button>
+            </template>
+            <template v-else>
+              <div class="collections__item__text">
+                <b>uid:</b> {{ item.id }} <b>название:</b> {{ item.value }}
+              </div>
+              <button
+                @click="deleteCollection(key, item.id)"
+                class="collections__item__button"
+              >
+                Удалить
+              </button>
+            </template>
+          </div>
         </div>
-      </div>
+      </template>
     </div>
     <table v-if="!isEmptyCollections" class="table">
       <thead>
@@ -76,7 +74,7 @@
           <td v-for="date in collections.dates" :key="date.id">
             <button
               v-if="collections.statuses.length && !findEvent({ date, task })"
-              @click.prevent="
+              @click="
                 addEvent({
                   taskId: task.id,
                   dateId: date.id,
@@ -106,13 +104,22 @@
 </template>
 
 <script>
-import { computed, reactive, ref } from "vue";
+import { computed, reactive } from "vue";
 import { uid } from "uid";
 
 export default {
   name: "BaseTable",
 
   setup() {
+    const INPUT_MESSAGES = {
+      tasks: "Задачи",
+      dates: "Даты",
+      statuses: "Статусы",
+      events: "События",
+    };
+
+    const formInputs = ["tasks", "dates", "statuses"];
+
     const collections = reactive({
       tasks: [],
       dates: [],
@@ -120,19 +127,7 @@ export default {
       events: [],
     });
 
-    const DEFAULT_MESSAGES = {
-      tasks: "Задачи",
-      dates: "Даты",
-      statuses: "Статусы",
-      events: "События",
-    };
-
-    const isOpenedModal = ref(false);
-    const currentTask = ref("");
-    const currentDate = ref("");
-    const currentStatus = ref("");
     const form = reactive({});
-    const formInputs = computed(() => ["tasks", "dates", "statuses"]);
     const isEmptyCollections = computed(() => {
       return !collections.tasks.length && !collections.dates.length;
     });
@@ -182,13 +177,9 @@ export default {
     };
 
     return {
-      DEFAULT_MESSAGES,
-      currentTask,
-      currentDate,
-      currentStatus,
+      INPUT_MESSAGES,
       addCollection,
       deleteCollection,
-      isOpenedModal,
       collections,
       form,
       formInputs,
