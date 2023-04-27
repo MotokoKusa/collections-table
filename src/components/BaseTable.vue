@@ -1,19 +1,23 @@
 <template>
   <div>
     <div class="form">
-      <div class="form__input" v-for="(elem, idx) in formInputs" :key="idx">
-        <input
-          :type="elem !== 'dates' ? 'text' : 'date'"
-          :name="elem"
-          v-model.trim="form[elem]"
-        />
-        <button
-          @click.prevent="addCollection(elem)"
-          :name="elem"
-          :disabled="!form[elem]"
-        >
-          Добавить
-        </button>
+      <div class="form__item" v-for="(elem, idx) in formInputs" :key="idx">
+        <p>{{ DEFAULT_MESSAGES[elem] }}</p>
+        <div class="form__input">
+          <input
+            :type="elem !== 'dates' ? 'text' : 'date'"
+            :name="elem"
+            :placeholder="DEFAULT_MESSAGES[elem]"
+            v-model.trim="form[elem]"
+          />
+          <button
+            @click.prevent="addCollection(elem)"
+            :name="elem"
+            :disabled="!form[elem]"
+          >
+            Добавить
+          </button>
+        </div>
       </div>
     </div>
     <div class="collections">
@@ -22,6 +26,7 @@
         v-for="(collection, key) in collections"
         :key="key"
       >
+        <p v-if="collection.length">{{ DEFAULT_MESSAGES[key] }}</p>
         <div
           class="collections__item"
           v-for="item in collection"
@@ -115,6 +120,13 @@ export default {
       events: [],
     });
 
+    const DEFAULT_MESSAGES = {
+      tasks: "Задачи",
+      dates: "Даты",
+      statuses: "Статусы",
+      events: "События",
+    };
+
     const isOpenedModal = ref(false);
     const currentTask = ref("");
     const currentDate = ref("");
@@ -170,6 +182,7 @@ export default {
     };
 
     return {
+      DEFAULT_MESSAGES,
       currentTask,
       currentDate,
       currentStatus,
