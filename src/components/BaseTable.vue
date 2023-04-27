@@ -161,11 +161,17 @@ export default {
     const deleteCollection = (key, id) => {
       if (key !== "events") {
         const event = collections.events.find(
-          (el) => el.taskId === id || el.dateId === id || el.statusId
+          (el) => el.taskId === id || el.dateId === id || el.statusId === id
         );
-        collections.events = collections.events.filter(
-          (el) => el.id !== event.id
-        );
+        if (event) {
+          collections.events = collections.events.filter(
+            (el) =>
+              el.id !== event.id &&
+              el.taskId !== id &&
+              el.dateId !== id &&
+              el.statusId !== id
+          );
+        }
       }
       collections[key] = collections[key].filter((el) => el.id !== id);
     };
