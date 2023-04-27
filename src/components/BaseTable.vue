@@ -192,3 +192,71 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  th {
+    font-weight: bold;
+    padding: 5px;
+    background: #efefef;
+    border: 1px solid #dddddd;
+  }
+
+  td {
+    border: 1px solid #dddddd;
+    padding: 5px;
+  }
+
+  tr td:first-child {
+    border-left: none;
+  }
+  tr th:first-child {
+    border-left: none;
+  }
+
+  tr td:last-child {
+    border-right: none;
+  }
+  tr th:last-child {
+    border-right: none;
+  }
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  &__input {
+    display: flex;
+
+    input {
+      width: 150px;
+    }
+  }
+}
+
+.collections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+  }
+}
+</style>
